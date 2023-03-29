@@ -63,7 +63,7 @@ The following parameters are recognized:
 
 parameter | description
 ----------|------------
-period    | Event emitting frequency (default: `2s`), example: `1m`
+period    | Screen refresh frequency (default: `2s`), example: `1m`
 
 ## Docker
 
