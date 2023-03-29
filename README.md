@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/szkiba/xk6-top/master/assets/xk6-top-logo.png" alt="xk6-top logo" style="height: 40px; width:40px;vertical-align: middle;"/> xk6-top <!-- omit in toc -->
 
-A [k6 extension](https://k6.io/docs/extensions/) to updating the current [k6](https://k6.io) metrics summaries on the terminal during the test run. Metric summaries are updated on the terminal screen at regular intervals (default: 1 second).
+A [k6 extension](https://k6.io/docs/extensions/) to updating the current [k6](https://k6.io) metrics summaries on the terminal during the test run. Metric summaries are updated on the terminal screen at regular intervals (default: 2s).
 
 All custom [k6](https://k6.io) metrics ([Counter](https://k6.io/docs/javascript-api/k6-metrics/counter/),[Gauge](https://k6.io/docs/javascript-api/k6-metrics/gauge/),[Rate](https://k6.io/docs/javascript-api/k6-metrics/rate/),[Trend](https://k6.io/docs/javascript-api/k6-metrics/trend/)) and [build-in metrics](https://k6.io/docs/using-k6/metrics/#built-in-metrics) are supported.
 
