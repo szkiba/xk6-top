@@ -1,4 +1,4 @@
-# <img src="https://github.com/szkiba/xk6-top/blob/main/assets/xk6-top-logo.png" alt="xk6-top logo" style="height: 32px; width:32px;"/> xk6-top <!-- omit in toc -->
+# <img src="https://raw.githubusercontent.com/szkiba/xk6-top/master/assets/xk6-top-logo.png" alt="xk6-top logo" style="height: 40px; width:40px;vertical-align: middle;"/> xk6-top <!-- omit in toc -->
 
 A [k6 extension](https://k6.io/docs/extensions/) to updating the current [k6](https://k6.io) metrics summaries on the terminal during the test run. Metric summaries are updated on the terminal screen at regular intervals (default: 1 second).
 
