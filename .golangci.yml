@@ -39,6 +39,7 @@ linters:
     - interfacer
     - scopelint
     - wrapcheck
+    - depguard
 # deprecated
     - deadcode
     - nosnakecase
