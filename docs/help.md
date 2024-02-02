@@ -14,7 +14,7 @@ Key                  | Function
 `+`, `Shift+Down`    | Expand, show more details
 `-`, `Shift+Up`      | Collapse, show less details
 
-There are also charts on some tabs. Due to the limitations of the terminal, one diagram is displayed at a time. You can switch between diagrams with the `Shift+Right` and `Shift+Left` keys.
+There are also charts on some tabs. Due to the limitations of the terminal, one chart is displayed at a time. You can switch between charts with the `Shift+Right` and `Shift+Left` keys.
 
 Certain tabs (on which data is not available) may be disabled. Their names appear in italics.
 
@@ -28,7 +28,7 @@ The most important element of the *Overview* tab is the table containing the cur
 
 The aggregated metric values are available in tabular form on the tabs named according to the type of metric (*Trends*, *Counters*, *Rates*, *Gauges*).
 
-By default, the table contains the tags expanded. Lines containing tags can be collapsed with the `-` key or the `Shift+Up` key combination. They can be expanded at any time later with the `+` key or the `Shift+Down` key combination.
+By default, the table contains the tags expanded. Rows containing tags can be collapsed with the `-` key or the `Shift+Up` key combination. They can be expanded at any time later with the `+` key or the `Shift+Down` key combination.
 
 ### Metrics charts
 
@@ -36,4 +36,4 @@ The most important metrics are also available in the form of a time chart on the
 
 Due to the limitations of the terminal, one chart can be seen on these tabs at a time. A second-level navigation enables the choice of a chart within a tab. You can switch to the next/previous chart with the key combinations `Shift+Right` and `Shift+Left`.
 
-The diagram displaying the *trend* type metric contains the percentile values in addition to the average value. Percetile series can be hidden individually by repeatedly using the `-` key or the `Shift+Up` key combination. They can be displayed at any type later with repeatedly using the `+` key or the `Shift+Down` key combination.
+The chart displaying the *trend* type metric contains the percentile values in addition to the average value. Percetile series can be hidden individually by repeatedly using the `-` key or the `Shift+Up` key combination. They can be displayed at any type later with repeatedly using the `+` key or the `Shift+Down` key combination.
