@@ -123,6 +123,10 @@ func (d *Digest) TimePassed() time.Duration {
 
 // ProgressPercent return percent value of elapsed time.
 func (d *Digest) ProgressPercent() float64 {
+	if d.State == StateFinished {
+		return 100
+	}
+
 	total := d.Duration()
 	left := d.TimeLeft()
 
