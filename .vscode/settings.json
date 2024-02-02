@@ -1,6 +1,5 @@
 {
   "go.lintTool": "golangci-lint",
-  "go.lintFlags": [
-    "--fast"
-  ]
+  "go.lintFlags": ["--fast"],
+  "go.formatTool": "golines"
 }
