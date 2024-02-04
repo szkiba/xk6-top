@@ -2,7 +2,6 @@
 package digest
 
 import (
-	"maps"
 	"time"
 )
 
@@ -33,9 +32,9 @@ func newDigest(from *Digest) *Digest {
 		d.Start = from.Start
 		d.Stop = from.Stop
 		d.Param = from.Param
-		d.Cumulative = maps.Clone(from.Cumulative)
-		d.Snapshot = maps.Clone(from.Snapshot)
-		d.Metrics = maps.Clone(from.Metrics)
+		d.Cumulative = from.Cumulative.clone()
+		d.Snapshot = from.Snapshot.clone()
+		d.Metrics = from.Metrics.clone()
 		d.State = from.State
 		if d.Config == nil {
 			d.Config = make(map[string]interface{})

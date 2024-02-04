@@ -16,3 +16,13 @@ func (mets Metrics) Find(name string) (*Metric, bool) {
 
 	return met, found
 }
+
+func (mets Metrics) clone() Metrics {
+	other := make(Metrics, len(mets))
+
+	for key, value := range mets {
+		other[key] = value
+	}
+
+	return other
+}
