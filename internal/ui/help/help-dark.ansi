@@ -1,0 +1,39 @@
+[38;5;39;1m[0m[38;5;39;1m[0m[38;5;39;1m### [0m[38;5;39;1mNavigation[0m[38;5;252m[0m
+[0m
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThe screen is divided into so-called tabs. You can switch between tabs using the navigation bar at the top of the[0m[38;5;252m screen.[0m
+
+[38;5;252m[0m[38;5;252m[0m[38;5;252m        KEY       │          FUNCTION[0m
+[0m[38;5;252m[0m[38;5;252m──────────────────┼──────────────────────────────[0m
+[0m[38;5;252m[0m[38;5;252m  Esc, Ctrl+c, q  │ Quit[0m
+[0m[38;5;252m[0m[38;5;252m  Right, Tab      │ Switch to the next tab[0m
+[0m[38;5;252m[0m[38;5;252m  Left, Shift+Tab │ Switch to the previous tab[0m
+[0m[38;5;252m[0m[38;5;252m  Shift+Right     │ Move to next chart[0m
+[0m[38;5;252m[0m[38;5;252m  Shift+Left      │ Move to previous chart[0m
+[0m[38;5;252m[0m[38;5;252m  Down,PgDown     │ Move down[0m
+[0m[38;5;252m[0m[38;5;252m  Up, PgUp        │ Move up[0m
+[0m[38;5;252m[0m[38;5;252m  +, Shift+Down   │ Expand, show more details[0m
+[0m[38;5;252m[0m[38;5;252m  -, Shift+Up     │ Collapse, show less details[0m
+[0m
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThere are also charts on some tabs. Due to the limitations of the terminal, one chart is displayed at a time. You can switch between charts with the [0m[38;5;203m [0m[38;5;203mShift+Right[0m[38;5;203m [0m[38;5;252m and [0m[38;5;203m [0m[38;5;203mShift+Left[0m[38;5;203m [0m[38;5;252m keys.[0m
+
+[38;5;252m[0m[38;5;252m[0m[38;5;252mCertain tabs (on which data is not available) may be disabled. Their names appear in[0m[38;5;252m italics.[0m
+[38;5;252m[0m[38;5;252m[0m
+[0m[38;5;39;1m[0m[38;5;39;1m[0m[38;5;39;1m### [0m[38;5;39;1mOverview[0m[38;5;39;1m tab[0m[38;5;252m[0m
+[0m
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThe [0m[38;5;252;3mOverview[0m[38;5;252m tab provides an overview of the test run. Here you can find the most important parameters such as start time, elapsed time, remaining time (in the case of a running test) and the colored result of the test run (in the case of a completed[0m[38;5;252m test).[0m
+
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThe most important element of the [0m[38;5;252;3mOverview[0m[38;5;252m tab is the table containing the current state of the thresholds in detail. The individual threshold expressions are marked with green (passed) or red (failed) color according to the success of the evaluation. From this table, you can immediately see which threshold expression[0m[38;5;252m failed.[0m
+[38;5;252m[0m[38;5;252m[0m
+[0m[38;5;39;1m[0m[38;5;39;1m[0m[38;5;39;1m### [0m[38;5;39;1mMetrics[0m[38;5;39;1m tables[0m[38;5;252m[0m
+[0m
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThe aggregated metric values are available in tabular form on the tabs named according to the type of metric ([0m[38;5;252;3mTrends[0m[38;5;252m, [0m[38;5;252;3mCounters[0m[38;5;252m, [0m[38;5;252;3mRates[0m[38;5;252m, [0m[38;5;252;3mGauges[0m[38;5;252m).[0m
+
+[38;5;252m[0m[38;5;252m[0m[38;5;252mBy default, the table contains the tags expanded. Rows containing tags can be collapsed with the [0m[38;5;203m [0m[38;5;203m-[0m[38;5;203m [0m[38;5;252m key or the [0m[38;5;203m [0m[38;5;203mShift+Up[0m[38;5;203m [0m[38;5;252m key combination. They can be expanded at any time later with the [0m[38;5;203m [0m[38;5;203m+[0m[38;5;203m [0m[38;5;252m key or the [0m[38;5;203m [0m[38;5;203mShift+Down[0m[38;5;203m [0m[38;5;252m key[0m[38;5;252m combination.[0m
+[38;5;252m[0m[38;5;252m[0m
+[0m[38;5;39;1m[0m[38;5;39;1m[0m[38;5;39;1m### [0m[38;5;39;1mMetrics[0m[38;5;39;1m charts[0m[38;5;252m[0m
+[0m
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThe most important metrics are also available in the form of a time chart on the tabs with names corresponding to the protocol ([0m[38;5;252;3mHTTP[0m[38;5;252m, [0m[38;5;252;3mgRPC[0m[38;5;252m, [0m[38;5;252;3mWS[0m[38;5;252m, [0m[38;5;252;3mBrowser[0m[38;5;252m).[0m
+
+[38;5;252m[0m[38;5;252m[0m[38;5;252mDue to the limitations of the terminal, one chart can be seen on these tabs at a time. A second-level navigation enables the choice of a chart within a tab. You can switch to the next/previous chart with the key combinations [0m[38;5;203m [0m[38;5;203mShift+Right[0m[38;5;203m [0m[38;5;252m and [0m[38;5;203m [0m[38;5;203mShift+Left[0m[38;5;203m [0m[38;5;252m.[0m
+
+[38;5;252m[0m[38;5;252m[0m[38;5;252mThe chart displaying the [0m[38;5;252;3mtrend[0m[38;5;252m type metric contains the percentile values in addition to the average value. Percetile series can be hidden individually by repeatedly using the [0m[38;5;203m [0m[38;5;203m-[0m[38;5;203m [0m[38;5;252m key or the [0m[38;5;203m [0m[38;5;203mShift+Up[0m[38;5;203m [0m[38;5;252m key combination. They can be displayed at any type later with repeatedly using the [0m[38;5;203m [0m[38;5;203m+[0m[38;5;203m [0m[38;5;252m key or the [0m[38;5;203m [0m[38;5;203mShift+Down[0m[38;5;203m [0m[38;5;252m key[0m[38;5;252m combination.[0m

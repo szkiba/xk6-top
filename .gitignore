@@ -1,17 +1,6 @@
-# custom binary
-k6
-
-# taskfile.io
-.task
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+/k6
+/k6.exe
+/k6top
+/k6top.exe
+/build
+debug.log

@@ -1,46 +1,65 @@
-/**
- * MIT License
- *
- * Copyright (c) 2023 Iván Szkiba
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 import http from "k6/http";
-import { sleep } from "k6";
+import { sleep, group } from "k6";
 
 export let options = {
   discardResponseBodies: true,
   scenarios: {
-    contacts: {
+    camel: {
       executor: "ramping-vus",
       startVUs: 1,
       stages: [
-        { duration: "10s", target: 2 },
-        { duration: "10s", target: 10 },
+        { duration: "1m", target: 2 },
+        { duration: "3m", target: 5 },
+        { duration: "2m", target: 2 },
+        { duration: "3m", target: 5 },
+        { duration: "2m", target: 3 },
+        { duration: "1m", target: 1 },
+      ],
+      gracefulRampDown: "0s",
+    },
+    snake: {
+      executor: "ramping-vus",
+      startVUs: 1,
+      stages: [
+        { duration: "1m", target: 1 },
+        { duration: "1m", target: 4 },
+        { duration: "1m", target: 1 },
+        { duration: "1m", target: 4 },
+        { duration: "1m", target: 1 },
+        { duration: "1m", target: 4 },
+        { duration: "1m", target: 1 },
+        { duration: "1m", target: 4 },
+        { duration: "1m", target: 1 },
+        { duration: "1m", target: 4 },
+        { duration: "1m", target: 1 },
+        { duration: "1m", target: 1 },
       ],
       gracefulRampDown: "0s",
     },
   },
+  thresholds: {
+    http_req_duration: ["p(90) < 400"],
+    iteration_duration: ["avg < 10000"],
+  },
 };
 
 export default function () {
-  http.get("http://test.k6.io");
-  sleep(1);
+  group("main", () => {
+    http.get("https://test-api.k6.io");
+  });
+
+  sleep(0.2);
+
+  group("list", () => {
+    http.get("https://test-api.k6.io/public/crocodiles/");
+  });
+
+  sleep(0.2);
+
+  group("crocodiles", () => {
+    for (var i = 0; i < 5; i++) {
+      http.get(http.url`https://test-api.k6.io/public/crocodiles/${i}/`);
+      sleep(0.5);
+    }
+  });
 }
