@@ -22,8 +22,10 @@ func Subscribe(ctx context.Context, url string, sub chan tea.Msg) tea.Cmd {
 			sub <- &digest.Event{Type: digest.EventTypeDisconnect}
 		})
 
+		parser := newParser()
+
 		return client.SubscribeRawWithContext(ctx, func(msg *sse.Event) {
-			event, perr := parse(msg)
+			event, perr := parser.parse(msg)
 			if perr != nil {
 				sub <- perr
 
