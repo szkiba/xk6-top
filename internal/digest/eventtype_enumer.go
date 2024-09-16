@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-const _EventTypeName = "configparammetricsnapshotcumulativestartstopconnectdisconnect"
+const _EventTypeName = "configparammetricsnapshotcumulativestartstopthresholdconnectdisconnect"
 
-var _EventTypeIndex = [...]uint8{0, 6, 11, 17, 25, 35, 40, 44, 51, 61}
+var _EventTypeIndex = [...]uint8{0, 6, 11, 17, 25, 35, 40, 44, 53, 60, 70}
 
-const _EventTypeLowerName = "configparammetricsnapshotcumulativestartstopconnectdisconnect"
+const _EventTypeLowerName = "configparammetricsnapshotcumulativestartstopthresholdconnectdisconnect"
 
 func (i EventType) String() string {
 	if i < 0 || i >= EventType(len(_EventTypeIndex)-1) {
@@ -32,11 +32,12 @@ func _EventTypeNoOp() {
 	_ = x[EventTypeCumulative-(4)]
 	_ = x[EventTypeStart-(5)]
 	_ = x[EventTypeStop-(6)]
-	_ = x[EventTypeConnect-(7)]
-	_ = x[EventTypeDisconnect-(8)]
+	_ = x[EventTypeThreshold-(7)]
+	_ = x[EventTypeConnect-(8)]
+	_ = x[EventTypeDisconnect-(9)]
 }
 
-var _EventTypeValues = []EventType{EventTypeConfig, EventTypeParam, EventTypeMetric, EventTypeSnapshot, EventTypeCumulative, EventTypeStart, EventTypeStop, EventTypeConnect, EventTypeDisconnect}
+var _EventTypeValues = []EventType{EventTypeConfig, EventTypeParam, EventTypeMetric, EventTypeSnapshot, EventTypeCumulative, EventTypeStart, EventTypeStop, EventTypeThreshold, EventTypeConnect, EventTypeDisconnect}
 
 var _EventTypeNameToValueMap = map[string]EventType{
 	_EventTypeName[0:6]:        EventTypeConfig,
@@ -53,10 +54,12 @@ var _EventTypeNameToValueMap = map[string]EventType{
 	_EventTypeLowerName[35:40]: EventTypeStart,
 	_EventTypeName[40:44]:      EventTypeStop,
 	_EventTypeLowerName[40:44]: EventTypeStop,
-	_EventTypeName[44:51]:      EventTypeConnect,
-	_EventTypeLowerName[44:51]: EventTypeConnect,
-	_EventTypeName[51:61]:      EventTypeDisconnect,
-	_EventTypeLowerName[51:61]: EventTypeDisconnect,
+	_EventTypeName[44:53]:      EventTypeThreshold,
+	_EventTypeLowerName[44:53]: EventTypeThreshold,
+	_EventTypeName[53:60]:      EventTypeConnect,
+	_EventTypeLowerName[53:60]: EventTypeConnect,
+	_EventTypeName[60:70]:      EventTypeDisconnect,
+	_EventTypeLowerName[60:70]: EventTypeDisconnect,
 }
 
 var _EventTypeNames = []string{
@@ -67,8 +70,9 @@ var _EventTypeNames = []string{
 	_EventTypeName[25:35],
 	_EventTypeName[35:40],
 	_EventTypeName[40:44],
-	_EventTypeName[44:51],
-	_EventTypeName[51:61],
+	_EventTypeName[44:53],
+	_EventTypeName[53:60],
+	_EventTypeName[60:70],
 }
 
 // EventTypeString retrieves an enum value from the enum constants string name.

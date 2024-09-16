@@ -11,6 +11,7 @@ const (
 	EventTypeCumulative                  // EventTypeCumulative mean "cumulative" SSE event.
 	EventTypeStart                       // EventTypeStart mean "start" SSE event.
 	EventTypeStop                        // EventTypeStop mean "stop" SSE event.
+	EventTypeThreshold                   // EventTypeThreshold mean "threshold" SSE event.
 	EventTypeConnect                     // EventTypeConnect mean SSE channel connected.
 	EventTypeDisconnect                  // EventTypeDisconnect mean SSE channel disconnected.
 )
