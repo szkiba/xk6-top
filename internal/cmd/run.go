@@ -24,7 +24,7 @@ func runCmd() *cobra.Command {
 		Short:   "k6 test runner and terminal-based metrics dashboard viewer",
 		Long:    runHelp,
 		Version: version,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			return runRun(args)
 		},
 

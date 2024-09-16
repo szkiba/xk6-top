@@ -40,7 +40,7 @@ func RootCmd() *cobra.Command {
 		Long:    rootHelp,
 		Version: version,
 		Args:    cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			endpoint, err := url.JoinPath(baseURL, "/events")
 			if err != nil {
 				return err
