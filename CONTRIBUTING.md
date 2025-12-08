@@ -148,6 +148,23 @@ xk6 build --with github.com/szkiba/xk6-top=.
 
 [build]: #build---build-custom-k6-with-extension
 
+### snapshot - Creating an executable binary with a snapshot version
+
+The goreleaser command-line tool is used during the release process. During development, it is advisable to create binaries with the same tool from time to time.
+
+```bash
+goreleaser build --snapshot --clean --single-target -o build/k6top
+```
+
+#### doc - Updating the documentation
+
+Some parts of the documentation, such as the [CLI Reference](#cli-reference), example codes, are automatically generated.
+
+```
+go generate ./internal/cmd
+marp -o docs/intro/index.html docs/intro.md
+```
+
 ### format - Format the go source codes
 
 Use the `go fmt` command to format Go source code before committing.

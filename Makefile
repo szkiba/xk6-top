@@ -11,10 +11,12 @@ __help__:
 	@echo '  all      Run relevant tasks'
 	@echo '  build    Build custom k6 with extension'
 	@echo '  clean    Clean the working directory'
+	@echo '  doc      Updating the documentation'
 	@echo '  format   Format the go source codes'
 	@echo '  lint     Run the linter'
 	@echo '  makefile Generate the Makefile'
 	@echo '  security Run security checks'
+	@echo '  snapshot Creating an executable binary with a snapshot version'
 	@echo '  test     Run the tests'
 
 # Run relevant tasks
@@ -34,6 +36,10 @@ clean:
 	@(\
 		rm -rf ./k6 ./coverage.txt ./build ./node_modules ./bun.lockb;\
 	)
+
+# Updating the documentation
+.PHONY: doc
+doc: 
 
 # Format the go source codes
 .PHONY: format
@@ -63,6 +69,13 @@ security:
 	@(\
 		gosec -quiet ./...;\
 		govulncheck ./...;\
+	)
+
+# Creating an executable binary with a snapshot version
+.PHONY: snapshot
+snapshot: 
+	@(\
+		goreleaser build --snapshot --clean --single-target -o build/k6top;\
 	)
 
 # Run the tests
