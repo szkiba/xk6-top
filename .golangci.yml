@@ -37,25 +37,16 @@ linters:
           allow:
             - $gostd
             - github.com/stretchr/testify/require
-            - github.com/PaesslerAG/gval
-            - github.com/PaesslerAG/jsonpath
-            - github.com/PuerkitoBio/goquery
-            - github.com/brianvoe/gofakeit/v6
-            - github.com/coder/websocket
-            - github.com/go-resty/resty/v2
-            - github.com/gorilla/websocket
-            - github.com/grafana/sobek
-            - dario.cat/mergo
-            - github.com/santhosh-tekuri/jsonschema/v5
-            - github.com/sirupsen/logrus
-            - github.com/stretchr/testify
-            - github.com/stretchr/testify/_codegen
-            - github.com/stretchr/testify/assert
-            - github.com/stretchr/testify/suite
-            - github.com/tidwall/gjson
-            - github.com/traefik/yaegi
+            - github.com/Knetic/govaluate
+            - github.com/charmbracelet/bubbles
+            - github.com/charmbracelet/bubbletea
+            - github.com/charmbracelet/glamour
+            - github.com/charmbracelet/lipgloss
+            - github.com/guptarohit/asciigraph
+            - github.com/r3labs/sse/v2
+            - github.com/spf13/cobra
             - go.k6.io/k6
-            - github.com/szkiba/xk6-g0
+            - github.com/szkiba/xk6-top
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0

@@ -34,18 +34,25 @@ func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-type tickMsg time.Time
+// View implements tea.Model.
+func (m Model) View() string {
+	return m.viewport.View()
+}
 
-func tickCmd() tea.Cmd {
-	return tea.Tick(time.Second/2, func(t time.Time) tea.Msg {
-		return tickMsg(t)
-	})
+// New creates new overview instance.
+func New(theme *theme.Theme) Model {
+	return Model{
+		theme:      theme,
+		throughput: throughput.New(),
+	}
 }
 
 // Update implements tea.Model.
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmds []tea.Cmd
-	var cmd tea.Cmd
+	var (
+		cmds []tea.Cmd
+		cmd  tea.Cmd
+	)
 
 	switch msg := msg.(type) {
 	case *digest.Digest:
@@ -54,6 +61,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, tickCmd())
 			m.started = msg.Time()
 		}
+
 		m.update()
 
 	case tea.WindowSizeMsg:
@@ -61,13 +69,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 
 		if !m.ready {
-			m.viewport = viewport.New(msg.Width, msg.Height-4)
+			m.viewport = viewport.New(msg.Width, msg.Height-4) //nolint:mnd
 			m.viewport.YPosition = 2
 			m.viewport.Style = m.viewport.Style.Padding(0, 1, 0, 1)
 			m.ready = true
 		} else {
 			m.viewport.Width = msg.Width
-			m.viewport.Height = msg.Height - 4
+			m.viewport.Height = msg.Height - 4 //nolint:mnd
 		}
 
 		m.update()
@@ -103,6 +111,7 @@ func (m *Model) nodata() {
 func (m *Model) update() {
 	if m.digest.GetState() == digest.StateWaiting {
 		m.nodata()
+
 		return
 	}
 
@@ -181,11 +190,14 @@ func (m *Model) infoLine(tresholds *digest.Thresholds) string {
 		}
 
 		var result string
+
 		switch lvl {
 		case digest.Error:
 			result = "failed"
 		case digest.Ready:
 			result = "passed"
+		case digest.Warning, digest.Info, digest.Notice, digest.None:
+			fallthrough
 		default:
 			result = "unknown"
 		}
@@ -249,6 +261,7 @@ func (m *Model) thresholdsSection(thresholds *digest.Thresholds) string {
 		if l := len(metric); l > width {
 			width = l
 		}
+
 		names = append(names, metric)
 	}
 
@@ -257,7 +270,7 @@ func (m *Model) thresholdsSection(thresholds *digest.Thresholds) string {
 	padd := lipgloss.NewStyle().
 		Width(width).
 		AlignHorizontal(lipgloss.Left).
-		MarginRight(2).
+		MarginRight(2). //nolint:mnd
 		MarginLeft(1)
 
 	for _, metric := range names {
@@ -269,11 +282,14 @@ func (m *Model) thresholdsSection(thresholds *digest.Thresholds) string {
 		last := len(sources) - 1
 		for idx, src := range sources {
 			lvl := results[src]
+
 			buff.WriteString(badge.Value(src, lvl))
+
 			if idx < last {
 				buff.WriteString(", ")
 			}
 		}
+
 		buff.WriteString("\n")
 	}
 
@@ -300,7 +316,7 @@ func (m *Model) countdown() string {
 
 	percent := float64(period-elapsed) / float64(period)
 
-	width := m.viewport.Width - 2
+	width := m.viewport.Width - 2 //nolint:mnd
 
 	empty := int(float64(width) * percent)
 	full := width - empty
@@ -312,15 +328,10 @@ func (m *Model) countdown() string {
 	return buff.String()
 }
 
-// View implements tea.Model.
-func (m Model) View() string {
-	return m.viewport.View()
-}
+type tickMsg time.Time
 
-// New creates new overview instance.
-func New(theme *theme.Theme) Model {
-	return Model{
-		theme:      theme,
-		throughput: throughput.New(),
-	}
+func tickCmd() tea.Cmd {
+	return tea.Tick(time.Second/2, func(t time.Time) tea.Msg { //nolint:mnd
+		return tickMsg(t)
+	})
 }

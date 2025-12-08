@@ -37,10 +37,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m *Model) update() {
-	m.ready = m.width != 0
-}
-
 // View implements tea.Model.
 func (m Model) View() string {
 	if !m.ready {
@@ -50,6 +46,10 @@ func (m Model) View() string {
 	return m.progress()
 }
 
+func (m *Model) update() {
+	m.ready = m.width != 0
+}
+
 func (m *Model) progress() string {
 	empty := m.width
 	full := 0
@@ -57,13 +57,7 @@ func (m *Model) progress() string {
 	if m.digest != nil {
 		percent := m.digest.ProgressPercent()
 
-		full = int(float64(m.width) * percent)
-		if full > m.width {
-			full = m.width
-		}
-		if full < 0 {
-			full = 0
-		}
+		full = max(min(int(float64(m.width)*percent), m.width), 0)
 
 		empty = m.width - full
 	}

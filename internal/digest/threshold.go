@@ -82,7 +82,7 @@ func (t *thresholdsEvaluator) setConfig(source map[string][]string) {
 	t.config = newThresholdsConfig(source)
 }
 
-func (t *thresholdsEvaluator) update(aggs Aggregates) *Thresholds {
+func (t *thresholdsEvaluator) update(aggs Aggregates) *Thresholds { //nolint:cyclop
 	failures := make([]*Failure, 0)
 
 	for metric, agg := range aggs {
@@ -119,6 +119,7 @@ func (t *thresholdsEvaluator) update(aggs Aggregates) *Thresholds {
 					lvl = Ready
 				} else {
 					lvl = Error
+
 					failed = append(failed, src)
 				}
 			}

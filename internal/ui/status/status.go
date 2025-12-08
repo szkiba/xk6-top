@@ -44,7 +44,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.update()
 
 	case error:
-		parts := strings.SplitN(msg.Error(), "\n", 2)
+		parts := strings.SplitN(msg.Error(), "\n", 2) //nolint:mnd
 		m.message = m.theme.Error.Render(parts[0])
 
 	case tickMsg:
@@ -54,10 +54,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	return m, tea.Batch(cmds...)
-}
-
-func (m *Model) update() {
-	m.ready = m.width != 0
 }
 
 // View implements tea.Model.
@@ -77,6 +73,10 @@ func (m Model) View() string {
 	return buff.String()
 }
 
+func (m *Model) update() {
+	m.ready = m.width != 0
+}
+
 func (m *Model) progress() string {
 	empty := m.width
 	full := 0
@@ -84,13 +84,7 @@ func (m *Model) progress() string {
 	if m.digest != nil && !m.digest.Playback && m.digest.State == digest.StateRunning {
 		percent := float64(time.Since(m.digest.Time())) / float64(m.digest.Period())
 
-		full = int(float64(m.width) * percent)
-		if full > m.width {
-			full = m.width
-		}
-		if full < 0 {
-			full = 0
-		}
+		full = max(min(int(float64(m.width)*percent), m.width), 0)
 
 		empty = m.width - full
 	}
@@ -118,6 +112,7 @@ func (m *Model) state() string {
 
 type tickMsg time.Time
 
+//nolint:mnd
 func tickCmd() tea.Cmd {
 	return tea.Tick(time.Second/2, func(t time.Time) tea.Msg {
 		return tickMsg(t)

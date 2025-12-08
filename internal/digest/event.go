@@ -4,28 +4,38 @@ package digest
 type EventType int
 
 const (
-	EventTypeConfig     EventType = iota // EventTypeConfig mean "config" SSE event.
-	EventTypeParam                       // EventTypeParam mean "param" SSE event.
-	EventTypeMetric                      // EventTypeMetric mean "metric" SSE event.
-	EventTypeSnapshot                    // EventTypeSnapshot mean "snapshot" SSE event.
-	EventTypeCumulative                  // EventTypeCumulative mean "cumulative" SSE event.
-	EventTypeStart                       // EventTypeStart mean "start" SSE event.
-	EventTypeStop                        // EventTypeStop mean "stop" SSE event.
-	EventTypeThreshold                   // EventTypeThreshold mean "threshold" SSE event.
-	EventTypeConnect                     // EventTypeConnect mean SSE channel connected.
-	EventTypeDisconnect                  // EventTypeDisconnect mean SSE channel disconnected.
+	// EventTypeConfig mean "config" SSE event.
+	EventTypeConfig EventType = iota
+	// EventTypeParam mean "param" SSE event.
+	EventTypeParam
+	// EventTypeMetric mean "metric" SSE event.
+	EventTypeMetric
+	// EventTypeSnapshot mean "snapshot" SSE event.
+	EventTypeSnapshot
+	// EventTypeCumulative mean "cumulative" SSE event.
+	EventTypeCumulative
+	// EventTypeStart mean "start" SSE event.
+	EventTypeStart
+	// EventTypeStop mean "stop" SSE event.
+	EventTypeStop
+	// EventTypeThreshold mean "threshold" SSE event.
+	EventTypeThreshold
+	// EventTypeConnect mean SSE channel connected.
+	EventTypeConnect
+	// EventTypeDisconnect mean SSE channel disconnected.
+	EventTypeDisconnect
 )
 
 //go:generate go run github.com/dmarkham/enumer@latest -text -json -transform lower -trimprefix EventType -type EventType
 
 // Event describes an SSE event.
 type Event struct {
-	Type EventType   `json:"event,omitempty"`
-	Data interface{} `json:"data,omitempty"`
+	Type EventType `json:"event,omitempty"`
+	Data any       `json:"data,omitempty"`
 }
 
 // ConfigData holds "config" event data.
-type ConfigData map[string]interface{}
+type ConfigData map[string]any
 
 // ParamData holds "param" event data.
 type ParamData struct {

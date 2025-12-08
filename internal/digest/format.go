@@ -7,7 +7,7 @@ import (
 
 func trunc(dur time.Duration) time.Duration {
 	if dur < time.Nanosecond {
-		return time.Nanosecond / 2
+		return time.Nanosecond / 2 //nolint:mnd
 	}
 
 	if dur < time.Microsecond {
@@ -23,15 +23,15 @@ func trunc(dur time.Duration) time.Duration {
 	}
 
 	if dur < time.Minute {
-		return time.Second / 10
+		return time.Second / 10 //nolint:mnd
 	}
 
 	if dur < time.Hour {
-		return time.Minute / 10
+		return time.Minute / 10 //nolint:mnd
 	}
 
 	if dur < time.Hour*24 {
-		return time.Hour / 10
+		return time.Hour / 10 //nolint:mnd
 	}
 
 	return time.Hour
@@ -103,7 +103,7 @@ var (
 )
 
 func conv(value float64, prec [][]int) (int, int) {
-	for i := 0; i < len(prec); i++ {
+	for i := range prec {
 		if value > float64(prec[i][0]) {
 			return prec[i][1], prec[i][2]
 		}

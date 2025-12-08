@@ -1,6 +1,7 @@
 package digest
 
 import (
+	"maps"
 	"sync"
 	"time"
 )
@@ -29,7 +30,7 @@ func NewDigester() *Digester {
 	return d
 }
 
-func cast[T ConfigData | *ParamData | Aggregates | Metrics](data interface{}) T {
+func cast[T ConfigData | *ParamData | Aggregates | Metrics](data any) T {
 	value, ok := data.(T)
 	if !ok {
 		panic("")
@@ -47,7 +48,7 @@ func (d *Digester) Digest() *Digest {
 }
 
 // Update process new event and returns a digest data.
-func (d *Digester) Update(event *Event) *Digest {
+func (d *Digester) Update(event *Event) *Digest { //nolint:cyclop,funlen
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
@@ -70,29 +71,26 @@ func (d *Digester) Update(event *Event) *Digest {
 		dig.Stop = cast[Aggregates](event.Data).Time()
 	case EventTypeMetric:
 		dig.State = StateRunning
-		for name, value := range cast[Metrics](event.Data) {
-			dig.Metrics[name] = value
-		}
+		maps.Copy(dig.Metrics, cast[Metrics](event.Data))
 	case EventTypeCumulative:
 		dig.State = StateRunning
 		aggs := cast[Aggregates](event.Data)
 		d.peaks.inject(aggs)
-		for name, value := range aggs {
-			dig.Cumulative[name] = value
-		}
+		maps.Copy(dig.Cumulative, aggs)
 		dig.Thresholds = d.thresholdsEvaluator.update(aggs)
 	case EventTypeSnapshot:
 		dig.State = StateRunning
 		data := cast[Aggregates](event.Data)
-		for name, value := range data {
-			dig.Snapshot[name] = value
-		}
+
+		maps.Copy(dig.Snapshot, data)
 		d.peaks.update(data)
 		d.series.update(data)
 	case EventTypeConnect:
 		dig.State = StateConnected
 	case EventTypeDisconnect:
 		dig.State = StateDetached
+	case EventTypeThreshold:
+		fallthrough
 	default:
 	}
 

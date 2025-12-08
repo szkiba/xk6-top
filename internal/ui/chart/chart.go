@@ -34,7 +34,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:cyclop
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -42,11 +42,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.details < len(m.series)-1 {
 				m.details++
 			}
+
 			m.update()
 		case "-", "shift+up":
 			if m.details > 0 {
 				m.details--
 			}
+
 			m.update()
 		default:
 		}
@@ -57,41 +59,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.update()
 
 	case tea.WindowSizeMsg:
-		m.width = msg.Width - 8
-		m.height = msg.Height - 9
+		m.width = msg.Width - 8   //nolint:mnd
+		m.height = msg.Height - 9 //nolint:mnd
 
 		m.update()
 	default:
 	}
 
 	return m, nil
-}
-
-func (m *Model) update() {
-	dig := m.digest.Digest()
-
-	scale := 1.0
-
-	if agg, ok := dig.Snapshot[m.series[0].Metric]; ok {
-		if val, hasAvg := agg[m.series[0].Aggregate]; hasAvg {
-			unit, _ := digest.Unit(val)
-			scale = float64(unit)
-		}
-	}
-
-	data := make([][]float64, 0, len(m.series))
-
-	for _, serie := range m.series {
-		values := m.digest.Serie(serie.Metric, serie.Aggregate)
-
-		for idx, value := range values {
-			values[idx] = value / scale
-		}
-
-		data = append(data, values)
-	}
-
-	m.data = data
 }
 
 // View implements tea.Model.
@@ -135,6 +110,33 @@ func New(digest *digest.Digester, series []*Serie) Model {
 	}
 
 	return m
+}
+
+func (m *Model) update() {
+	dig := m.digest.Digest()
+
+	scale := 1.0
+
+	if agg, ok := dig.Snapshot[m.series[0].Metric]; ok {
+		if val, hasAvg := agg[m.series[0].Aggregate]; hasAvg {
+			unit, _ := digest.Unit(val)
+			scale = float64(unit)
+		}
+	}
+
+	data := make([][]float64, 0, len(m.series))
+
+	for _, serie := range m.series {
+		values := m.digest.Serie(serie.Metric, serie.Aggregate)
+
+		for idx, value := range values {
+			values[idx] = value / scale
+		}
+
+		data = append(data, values)
+	}
+
+	m.data = data
 }
 
 //nolint:gochecknoglobals

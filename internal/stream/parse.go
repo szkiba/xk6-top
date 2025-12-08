@@ -22,7 +22,7 @@ func newParser() *parser {
 func (p *parser) parse(msg *sse.Event) (*digest.Event, error) {
 	var (
 		etype digest.EventType
-		edata interface{}
+		edata any
 		err   error
 	)
 
@@ -38,7 +38,7 @@ func (p *parser) parse(msg *sse.Event) (*digest.Event, error) {
 	return &digest.Event{Type: etype, Data: edata}, nil
 }
 
-func (p *parser) unmarshalData(etype digest.EventType, data []byte) (interface{}, error) {
+func (p *parser) unmarshalData(etype digest.EventType, data []byte) (any, error) {
 	switch etype {
 	case digest.EventTypeMetric:
 		return p.parseMetric(data)
@@ -59,12 +59,16 @@ func (p *parser) unmarshalData(etype digest.EventType, data []byte) (interface{}
 
 		return p.parseAggregates(data)
 
+	case digest.EventTypeThreshold,
+		digest.EventTypeConnect,
+		digest.EventTypeDisconnect:
+		fallthrough
 	default:
 		return nil, nil //nolint:nilnil
 	}
 }
 
-func (p *parser) parseMetric(data []byte) (interface{}, error) {
+func (p *parser) parseMetric(data []byte) (any, error) {
 	target := make(digest.Metrics)
 
 	if err := json.Unmarshal(data, &target); err != nil {
@@ -90,7 +94,7 @@ func (p *parser) parseMetric(data []byte) (interface{}, error) {
 	return target, nil
 }
 
-func (p *parser) parseParam(data []byte) (interface{}, error) {
+func (p *parser) parseParam(data []byte) (any, error) {
 	target := new(digest.ParamData)
 
 	if err := json.Unmarshal(data, target); err != nil {
@@ -100,7 +104,7 @@ func (p *parser) parseParam(data []byte) (interface{}, error) {
 	return target, nil
 }
 
-func (p *parser) parseConfig(data []byte) (interface{}, error) {
+func (p *parser) parseConfig(data []byte) (any, error) {
 	target := make(digest.ConfigData)
 
 	if err := json.Unmarshal(data, &target); err != nil {
@@ -110,7 +114,7 @@ func (p *parser) parseConfig(data []byte) (interface{}, error) {
 	return target, nil
 }
 
-func (p *parser) parseAggregatesLegacy(data []byte) (interface{}, error) {
+func (p *parser) parseAggregatesLegacy(data []byte) (any, error) {
 	target := make(digest.Aggregates)
 
 	if err := json.Unmarshal(data, &target); err != nil {
@@ -120,7 +124,7 @@ func (p *parser) parseAggregatesLegacy(data []byte) (interface{}, error) {
 	return target, nil
 }
 
-func (p *parser) parseAggregates(data []byte) (interface{}, error) {
+func (p *parser) parseAggregates(data []byte) (any, error) {
 	var samples [][]float64
 
 	if err := json.Unmarshal(data, &samples); err != nil {

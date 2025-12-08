@@ -1,6 +1,7 @@
 package digest
 
 import (
+	"maps"
 	"time"
 )
 
@@ -10,9 +11,7 @@ type Aggregate map[string]float64
 func (agg Aggregate) clone() Aggregate {
 	other := make(Aggregate, len(agg))
 
-	for key, value := range agg {
-		other[key] = value
-	}
+	maps.Copy(other, agg)
 
 	return other
 }

@@ -49,51 +49,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *Model) update() {
-	if m.digest == nil {
-		return
-	}
-
-	var names []string
-
-	cumulative := m.digest.Cumulative
-
-	for name, agg := range cumulative {
-		_, hasRate := agg["rate"]
-		_, hasMetric := m.digest.FindMetric(name)
-		if hasMetric && hasRate {
-			names = append(names, name)
-		}
-	}
-
-	sort.Strings(names)
-
-	rows := make([]table.Row, 0, len(names))
-
-	for _, name := range names {
-		met, found := m.digest.FindMetric(name)
-		if !found {
-			continue
-		}
-
-		dig := cumulative[name]
-		var row []string
-
-		if strings.ContainsRune(name, '{') {
-			continue
-		}
-
-		row = append(row, name)
-		for _, agg := range aggregateNames {
-			row = append(row, met.Contains.Format(dig[agg])+"/s")
-		}
-
-		rows = append(rows, row)
-	}
-
-	m.table.SetRows(rows)
-}
-
 // View implements tea.Model.
 func (m Model) View() string {
 	if len(m.table.Rows()) == 0 {
@@ -125,6 +80,54 @@ func New() Model {
 	return m
 }
 
+func (m *Model) update() {
+	if m.digest == nil {
+		return
+	}
+
+	var names []string
+
+	cumulative := m.digest.Cumulative
+
+	for name, agg := range cumulative {
+		_, hasRate := agg["rate"]
+
+		_, hasMetric := m.digest.FindMetric(name)
+		if hasMetric && hasRate {
+			names = append(names, name)
+		}
+	}
+
+	sort.Strings(names)
+
+	rows := make([]table.Row, 0, len(names))
+
+	for _, name := range names {
+		met, found := m.digest.FindMetric(name)
+		if !found {
+			continue
+		}
+
+		dig := cumulative[name]
+
+		var row []string
+
+		if strings.ContainsRune(name, '{') {
+			continue
+		}
+
+		row = append(row, name)
+		for _, agg := range aggregateNames {
+			row = append(row, met.Contains.Format(dig[agg])+"/s")
+		}
+
+		rows = append(rows, row)
+	}
+
+	m.table.SetRows(rows)
+}
+
+//nolint:mnd
 func columns() []table.Column {
 	cols := make([]table.Column, 0, len(aggregateNames)+1)
 

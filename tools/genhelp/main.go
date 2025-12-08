@@ -10,7 +10,8 @@ import (
 	"github.com/charmbracelet/glamour"
 )
 
-//nolint:forbidigo
+const fileMode = 0o600
+
 func render(src string, style string, dir string) error {
 	input, err := os.ReadFile(filepath.Clean(src))
 	if err != nil {
@@ -31,12 +32,13 @@ func render(src string, style string, dir string) error {
 
 	base := strings.TrimSuffix(filepath.Base(src), filepath.Ext(src)) + "-" + style + ".ansi"
 
-	return os.WriteFile(filepath.Join(dir, base), out, 0o600)
+	return os.WriteFile(filepath.Join(dir, base), out, fileMode)
 }
 
-//nolint:forbidigo
 func main() {
-	if len(os.Args) != 3 {
+	const argcount = 3
+
+	if len(os.Args) != argcount {
 		panic("Usage genhelp input-file output-dir")
 	}
 

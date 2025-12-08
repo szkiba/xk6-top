@@ -46,7 +46,6 @@ const (
 	defaultHost = "127.0.0.1"
 )
 
-//nolint:forbidigo
 func endpoint() string {
 	host := os.Getenv(envDashboardHost)
 	if len(host) == 0 {
@@ -61,16 +60,17 @@ func endpoint() string {
 	return fmt.Sprintf("http://%s/events", net.JoinHostPort(host, port))
 }
 
-//nolint:forbidigo
 func showAndRemove(output *os.File) {
 	if err := output.Close(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
+
 		return
 	}
 
 	saved, err := os.Open(output.Name())
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
+
 		return
 	}
 
@@ -88,7 +88,6 @@ func showAndRemove(output *os.File) {
 	}
 }
 
-//nolint:forbidigo
 func runRun(args []string) error {
 	if os.Getenv(envDashboard) != "true" {
 		if err := os.Setenv(envDashboard, "true"); err != nil {
@@ -96,7 +95,7 @@ func runRun(args []string) error {
 		}
 	}
 
-	k6args := make([]string, len(args)+2)
+	k6args := make([]string, len(args)+2) //nolint:mnd
 
 	k6args[0] = "run"
 	k6args[1] = "-q"
@@ -137,6 +136,7 @@ func runRun(args []string) error {
 	}()
 
 	_, teaerr := prog.Run()
+
 	cancel()
 
 	var e *exec.ExitError

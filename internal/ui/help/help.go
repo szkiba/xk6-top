@@ -43,12 +43,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 
 		if !m.ready {
-			m.viewport = viewport.New(msg.Width, msg.Height-4)
+			m.viewport = viewport.New(msg.Width, msg.Height-4) //nolint:mnd
 			m.viewport.YPosition = 2
 			m.ready = true
 		} else {
 			m.viewport.Width = msg.Width
-			m.viewport.Height = msg.Height - 4
+			m.viewport.Height = msg.Height - 4 //nolint:mnd
 		}
 
 		m.update()
@@ -59,6 +59,22 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.viewport, cmd = m.viewport.Update(msg)
 
 	return m, cmd
+}
+
+// View implements tea.Model.
+func (m Model) View() string {
+	if !m.ready {
+		return ""
+	}
+
+	return m.viewport.View()
+}
+
+// New creates new help instance.
+func New(theme *theme.Theme) Model {
+	m := Model{theme: theme}
+
+	return m
 }
 
 func (m *Model) update() {
@@ -77,22 +93,6 @@ func (m *Model) update() {
 	)
 
 	m.viewport.SetContent(
-		lipgloss.NewStyle().Padding(0, 1, 0, 1).Width(m.width - 2).Render(buff.String()),
+		lipgloss.NewStyle().Padding(0, 1, 0, 1).Width(m.width - 2).Render(buff.String()), //nolint:mnd
 	)
-}
-
-// View implements tea.Model.
-func (m Model) View() string {
-	if !m.ready {
-		return ""
-	}
-
-	return m.viewport.View()
-}
-
-// New creates new help instance.
-func New(theme *theme.Theme) Model {
-	m := Model{theme: theme}
-
-	return m
 }
