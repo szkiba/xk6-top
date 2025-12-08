@@ -24,12 +24,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -51,7 +51,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		m.table.SetHeight(m.height - 5)
+		m.table.SetHeight(m.height - 5) //nolint:mnd
 		m.table.SetWidth(m.width)
 
 		m.update()
@@ -64,68 +64,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *Model) update() {
-	if m.digest == nil {
-		return
-	}
-
-	var names []string
-
-	cumulative := m.digest.Cumulative
-
-	for name := range cumulative {
-		metric, hasMetric := m.digest.FindMetric(name)
-		if hasMetric && metric.Type == m.mtype && name != "time" {
-			names = append(names, name)
-		}
-	}
-
-	sort.Strings(names)
-
-	rows := make([]table.Row, 0, len(names))
-
-	for _, name := range names {
-		met, found := m.digest.FindMetric(name)
-		if !found {
-			continue
-		}
-
-		dig := cumulative[name]
-		var row []string
-
-		if strings.ContainsRune(name, '{') {
-			if !m.showTags {
-				continue
-			}
-			start := strings.IndexRune(name, '{')
-			end := strings.LastIndexByte(name, '}')
-			name = " { " + name[start+1:end] + " }"
-		}
-
-		row = append(row, name)
-		for _, agg := range m.mtype.Aggregates() {
-			str := met.Contains.Format(dig[agg])
-			if agg == "rate" || agg == "peak" {
-				str += "/s"
-			}
-
-			row = append(row, str)
-		}
-
-		rows = append(rows, row)
-	}
-
-	m.table.SetColumns(columnsFor(m.mtype, m.width))
-	m.table.SetRows(rows)
-}
-
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	return m.table.View()
 }
 
 // New creates new summary instance.
-func New(mtype digest.MetricType) Model {
+func New(mtype digest.MetricType) *Model {
 	styles := table.Styles{
 		Selected: lipgloss.NewStyle().Reverse(true),
 		Header: lipgloss.NewStyle().
@@ -145,9 +90,74 @@ func New(mtype digest.MetricType) Model {
 		showTags: true,
 	}
 
-	return m
+	return &m
 }
 
+func (m *Model) cummulativeMetrics() []string {
+	var names []string
+
+	for name := range m.digest.Cumulative {
+		metric, hasMetric := m.digest.FindMetric(name)
+		if hasMetric && metric.Type == m.mtype && name != "time" {
+			names = append(names, name)
+		}
+	}
+
+	sort.Strings(names)
+
+	return names
+}
+
+func (m *Model) update() {
+	if m.digest == nil {
+		return
+	}
+
+	cumulative := m.digest.Cumulative
+	names := m.cummulativeMetrics()
+
+	rows := make([]table.Row, 0, len(names))
+
+	for _, name := range names {
+		met, found := m.digest.FindMetric(name)
+		if !found {
+			continue
+		}
+
+		dig := cumulative[name]
+
+		var row []string
+
+		if strings.ContainsRune(name, '{') {
+			if !m.showTags {
+				continue
+			}
+
+			start := strings.IndexRune(name, '{')
+			end := strings.LastIndexByte(name, '}')
+
+			name = " { " + name[start+1:end] + " }"
+		}
+
+		row = append(row, name)
+
+		for _, agg := range m.mtype.Aggregates() {
+			str := met.Contains.Format(dig[agg])
+			if agg == "rate" || agg == "peak" {
+				str += "/s"
+			}
+
+			row = append(row, str)
+		}
+
+		rows = append(rows, row)
+	}
+
+	m.table.SetColumns(columnsFor(m.mtype, m.width))
+	m.table.SetRows(rows)
+}
+
+//nolint:mnd
 func columnsFor(mtype digest.MetricType, width int) []table.Column {
 	if width == 0 {
 		width = defaultWidth
@@ -172,17 +182,3 @@ func columnsFor(mtype digest.MetricType, width int) []table.Column {
 }
 
 const defaultWidth = 80
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}

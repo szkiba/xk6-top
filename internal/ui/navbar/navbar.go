@@ -55,7 +55,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:cyclop
 	idx := m.Active
 
 	switch msg := msg.(type) {
@@ -65,6 +65,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			for next := m.Active + 1; next < len(m.items); next++ {
 				if !m.items[next].Disabled {
 					m.Active = next
+
 					break
 				}
 			}
@@ -72,6 +73,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			for prev := m.Active - 1; prev >= 0; prev-- {
 				if !m.items[prev].Disabled {
 					m.Active = prev
+
 					break
 				}
 			}
@@ -101,6 +103,7 @@ func (m Model) View() string {
 	var doc strings.Builder
 
 	doc.WriteString(m.theme.Primary.Render(" k6 "))
+
 	for idx, item := range m.items {
 		style := inactiveStyle
 		if item.Disabled {

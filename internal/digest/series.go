@@ -32,6 +32,7 @@ func (s *series) update(aggs Aggregates) {
 			if _, retained := s.retained[key]; !retained {
 				continue
 			}
+
 			serie, found := s.values[key]
 			if !found {
 				serie = make([]float64, length, length+1)

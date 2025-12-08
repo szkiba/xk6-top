@@ -39,7 +39,7 @@ type Model struct {
 
 	sseEndpoint string
 
-	sseContext context.Context
+	sseContext context.Context //nolint:containedctx
 	sseCancel  context.CancelFunc
 }
 
@@ -77,17 +77,6 @@ func New(sseEndpoint string) *Model {
 	return m
 }
 
-func (m *Model) readEvent() tea.Msg {
-	for {
-		select {
-		case event := <-m.stream:
-			return event
-		case <-m.sseContext.Done():
-			return quitMsg{}
-		}
-	}
-}
-
 // Init implements tea.Model.
 func (m *Model) Init() tea.Cmd {
 	return tea.Batch(
@@ -97,15 +86,18 @@ func (m *Model) Init() tea.Cmd {
 }
 
 // Update implements tea.Model.
-func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmds []tea.Cmd
-	var cmd tea.Cmd
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:cyclop,funlen
+	var (
+		cmds []tea.Cmd
+		cmd  tea.Cmd
+	)
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c", "q", "esc":
 			m.sseCancel()
+
 			if m.digest.GetState() == digest.StateDetached {
 				return m, tea.Quit
 			}
@@ -115,12 +107,14 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case StopMsg:
 		m.sseCancel()
+
 		return m, tea.Quit
 	case quitMsg:
 		return m, tea.Quit
 	case *digest.Event:
 		cmds = append(cmds, m.readEvent)
 		m.digest = m.digester.Update(msg)
+
 		cmds = append(cmds, m.enableNav(m.digest)...)
 		if !m.digest.Playback {
 			cmds = append(cmds, digestCmd(m.digest))
@@ -133,6 +127,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case navbar.NavChangedMsg:
 		wsmsg := tea.WindowSizeMsg{Width: m.width, Height: m.height}
+
 		cmds = append(cmds, func() tea.Msg { return wsmsg })
 
 		if m.digest != nil {
@@ -155,6 +150,32 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
+// View implements tea.Model.
+func (m *Model) View() string {
+	if !m.ready {
+		return "\n  Initializing..."
+	}
+
+	return fmt.Sprintf(
+		"%s\n%s\n%s\n%s",
+		m.navbar.View(),
+		m.divider.View(),
+		m.tabContents[m.navbar.Active].View(),
+		m.status.View(),
+	)
+}
+
+func (m *Model) readEvent() tea.Msg {
+	for {
+		select {
+		case event := <-m.stream:
+			return event
+		case <-m.sseContext.Done():
+			return quitMsg{}
+		}
+	}
+}
+
 func (m *Model) enableNav(dig *digest.Digest) []tea.Cmd {
 	var cmds []tea.Cmd
 
@@ -175,21 +196,6 @@ func (m *Model) enableNav(dig *digest.Digest) []tea.Cmd {
 	}
 
 	return cmds
-}
-
-// View implements tea.Model.
-func (m *Model) View() string {
-	if !m.ready {
-		return "\n  Initializing..."
-	}
-
-	return fmt.Sprintf(
-		"%s\n%s\n%s\n%s",
-		m.navbar.View(),
-		m.divider.View(),
-		m.tabContents[m.navbar.Active].View(),
-		m.status.View(),
-	)
 }
 
 func digestCmd(digest *digest.Digest) tea.Cmd {

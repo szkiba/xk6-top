@@ -18,12 +18,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case *digest.Digest:
 		m.digest = msg
@@ -37,17 +37,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m *Model) update() {
-	m.ready = m.width != 0
-}
-
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if !m.ready {
 		return ""
 	}
 
 	return m.progress()
+}
+
+func (m *Model) update() {
+	m.ready = m.width != 0
 }
 
 func (m *Model) progress() string {
@@ -57,13 +57,7 @@ func (m *Model) progress() string {
 	if m.digest != nil {
 		percent := m.digest.ProgressPercent()
 
-		full = int(float64(m.width) * percent)
-		if full > m.width {
-			full = m.width
-		}
-		if full < 0 {
-			full = 0
-		}
+		full = max(min(int(float64(m.width)*percent), m.width), 0)
 
 		empty = m.width - full
 	}
@@ -73,6 +67,6 @@ func (m *Model) progress() string {
 }
 
 // New creates new divider instance.
-func New(theme *theme.Theme) Model {
-	return Model{theme: theme}
+func New(theme *theme.Theme) *Model {
+	return &Model{theme: theme}
 }

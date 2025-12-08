@@ -6,13 +6,12 @@ import (
 	"strings"
 )
 
-//nolint:gochecknoglobals,forbidigo
+//nolint:gochecknoglobals
 var (
 	extensionActive bool
 	stderrOrig      *os.File
 )
 
-//nolint:forbidigo
 func createTemp(name string) *os.File {
 	tmp, err := os.CreateTemp(os.TempDir(), name)
 	if err != nil {
@@ -31,13 +30,12 @@ func isEnablerFlagValue(value string) bool {
 	return value == OutputName || strings.HasPrefix(value, OutputName+"=")
 }
 
-//nolint:forbidigo
 func checkArgs(args []string) (bool, bool, int) {
 	argn := len(args)
 
 	var runIndex, outIndex, quietIndex int
 
-	for idx := 0; idx < argn; idx++ {
+	for idx := range argn {
 		arg := args[idx]
 		if arg == "run" && runIndex == 0 {
 			runIndex = idx
@@ -77,7 +75,6 @@ func addQuietFlag(args []string, runIndex int) []string {
 	return args
 }
 
-//nolint:forbidigo
 func fixArgs(args []string) ([]string, bool) {
 	active, quiet, runIndex := checkArgs(os.Args)
 
@@ -89,8 +86,6 @@ func fixArgs(args []string) ([]string, bool) {
 }
 
 // CaptureStart starts capturing stderr.
-//
-//nolint:forbidigo
 func CaptureStart() {
 	os.Args, extensionActive = fixArgs(os.Args)
 
@@ -98,15 +93,14 @@ func CaptureStart() {
 		return
 	}
 
-	stderrOrig = os.Stderr //nolint:forbidigo
+	stderrOrig = os.Stderr
 	os.Stderr = createTemp("stderr")
 
 	if os.Getenv(envDashboard) != "true" {
-		os.Setenv(envDashboard, "true") //nolint:errcheck,gosec
+		_ = os.Setenv(envDashboard, "true")
 	}
 }
 
-//nolint:forbidigo
 func copyAndRemove(dst *os.File, src *os.File) error {
 	if err := src.Sync(); err != nil {
 		return err
@@ -123,7 +117,6 @@ func copyAndRemove(dst *os.File, src *os.File) error {
 	return os.Remove(src.Name())
 }
 
-//nolint:forbidigo
 func captureEnd() error {
 	if !extensionActive {
 		return nil

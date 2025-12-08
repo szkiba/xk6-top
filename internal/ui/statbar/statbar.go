@@ -41,12 +41,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (*Model, tea.Cmd) {
 	idx := m.Active
 
 	switch msg := msg.(type) {
@@ -76,37 +76,8 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *Model) update() {
-	m.ready = m.width != 0 && m.digest != nil && !m.digest.Start.IsZero()
-}
-
-func (m Model) getLabels() []string {
-	labels := make([]string, 0, len(m.panels))
-
-	useCaptions := m.captionsWidth <= m.width
-
-	for _, panel := range m.panels {
-		if useCaptions {
-			labels = append(labels, panel.Caption)
-		} else {
-			labels = append(labels, panel.Label)
-		}
-	}
-
-	return labels
-}
-
-func (m Model) getPanelWidth() int {
-	width := m.width / len(m.panels)
-	if width < m.minPanelWidth {
-		width = m.minPanelWidth
-	}
-
-	return width
-}
-
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if !m.ready {
 		return ""
 	}
@@ -142,7 +113,7 @@ func (m Model) View() string {
 }
 
 // New creates new statbar instance.
-func New(theme *theme.Theme, panels []*Panel) Model {
+func New(theme *theme.Theme, panels []*Panel) *Model {
 	m := Model{
 		theme:  theme,
 		panels: panels,
@@ -155,6 +126,7 @@ func New(theme *theme.Theme, panels []*Panel) Model {
 		if len(panel.Caption) > maxCaptionLen {
 			maxCaptionLen = len(panel.Caption)
 		}
+
 		if len(panel.Label) > maxLabelLen {
 			maxLabelLen = len(panel.Label)
 		}
@@ -163,19 +135,31 @@ func New(theme *theme.Theme, panels []*Panel) Model {
 	m.captionsWidth = len(panels) * maxCaptionLen
 	m.minPanelWidth = maxLabelLen
 
-	return m
+	return &m
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+func (m *Model) update() {
+	m.ready = m.width != 0 && m.digest != nil && !m.digest.Start.IsZero()
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
+func (m *Model) getLabels() []string {
+	labels := make([]string, 0, len(m.panels))
+
+	useCaptions := m.captionsWidth <= m.width
+
+	for _, panel := range m.panels {
+		if useCaptions {
+			labels = append(labels, panel.Caption)
+		} else {
+			labels = append(labels, panel.Label)
+		}
 	}
-	return b
+
+	return labels
+}
+
+func (m *Model) getPanelWidth() int {
+	width := max(m.width/len(m.panels), m.minPanelWidth)
+
+	return width
 }

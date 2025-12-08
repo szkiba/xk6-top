@@ -1,15 +1,21 @@
 package digest
 
 // Level defines log and alert levels.
-type Level int
+type Level int //nolint:recvcheck
 
 const (
-	None    Level = iota // None means regular.
-	Info                 // Info means informational.
-	Ready                // Ready means everything is ok.
-	Notice               // Notice means something happened.
-	Warning              // Warning means possible problem.
-	Error                // Error means error happened.
+	// None means regular.
+	None Level = iota
+	// Info means informational.
+	Info
+	// Ready means everything is ok.
+	Ready
+	// Notice means something happened.
+	Notice
+	// Warning means possible problem.
+	Warning
+	// Error means error happened.
+	Error
 )
 
 //go:generate go run github.com/dmarkham/enumer@latest -text -type Level

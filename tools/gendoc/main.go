@@ -13,7 +13,8 @@ import (
 	"github.com/szkiba/xk6-top/internal/cmd"
 )
 
-//nolint:forbidigo
+const fileMode = 0o600
+
 func checkerr(err error) {
 	if err == nil {
 		return
@@ -34,9 +35,10 @@ func fprintf(out io.Writer, format string, args ...any) {
 	checkerr(err)
 }
 
-//nolint:forbidigo
 func main() {
-	if len(os.Args) != 2 { //nolint:gomnd
+	const argcount = 2
+
+	if len(os.Args) != argcount {
 		fmt.Fprint(os.Stderr, "usage: gendoc filename")
 		os.Exit(1)
 	}
@@ -84,5 +86,5 @@ func main() {
 		}
 	}
 
-	checkerr(os.WriteFile(readme, src, 0o600)) //nolint:gomnd
+	checkerr(os.WriteFile(readme, src, fileMode))
 }

@@ -37,7 +37,7 @@ func dark() *Theme {
 		State: lipgloss.NewStyle().
 			Bold(true).
 			Foreground(lipgloss.Color("#808080")).
-			Width(11).
+			Width(11). //nolint:mnd
 			Padding(0, 1, 0, 1),
 		Error: lipgloss.NewStyle().
 			Italic(true).
@@ -57,7 +57,7 @@ func light() *Theme {
 		State: lipgloss.NewStyle().
 			Bold(true).
 			Foreground(lipgloss.Color("#a0a0a0")).
-			Width(11).
+			Width(11). //nolint:mnd
 			Padding(0, 1, 0, 1),
 		Error: lipgloss.NewStyle().
 			Italic(true).

@@ -1,6 +1,9 @@
 package digest
 
-import "strings"
+import (
+	"maps"
+	"strings"
+)
 
 // Metrics contains metric by name.
 type Metrics map[string]*Metric
@@ -20,9 +23,7 @@ func (mets Metrics) Find(name string) (*Metric, bool) {
 func (mets Metrics) clone() Metrics {
 	other := make(Metrics, len(mets))
 
-	for key, value := range mets {
-		other[key] = value
-	}
+	maps.Copy(other, mets)
 
 	return other
 }

@@ -16,7 +16,7 @@ import (
 type Model struct {
 	theme    *theme.Theme
 	digest   *digest.Digest
-	statbar  statbar.Model
+	statbar  *statbar.Model
 	charts   []tea.Model
 	viewport viewport.Model
 	ready    bool
@@ -25,19 +25,23 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmds []tea.Cmd
-	var cmd tea.Cmd
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var (
+		cmds []tea.Cmd
+		cmd  tea.Cmd
+	)
 
 	switch msg := msg.(type) {
 	case statbar.PanelChangedMsg:
 		wsmsg := tea.WindowSizeMsg{Width: m.width, Height: m.height}
+
 		cmds = append(cmds, func() tea.Msg { return wsmsg })
+
 		m.update()
 	case *digest.Digest:
 		m.digest = msg
@@ -48,12 +52,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 
 		if !m.ready {
-			m.viewport = viewport.New(msg.Width, msg.Height-4)
+			m.viewport = viewport.New(msg.Width, msg.Height-4) //nolint:mnd
 			m.viewport.YPosition = 2
 			m.ready = true
 		} else {
 			m.viewport.Width = msg.Width
-			m.viewport.Height = msg.Height - 4
+			m.viewport.Height = msg.Height - 4 //nolint:mnd
 		}
 
 		m.update()
@@ -73,17 +77,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-func (m *Model) update() {
-	graph := m.charts[m.statbar.Active].View()
-
-	div := m.theme.Divider.
-		Render(strings.Repeat("─", m.width))
-
-	m.viewport.SetContent(m.statbar.View() + "\n" + div + "\n" + graph)
-}
-
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if !m.ready {
 		return "\n  Initializing..."
 	}
@@ -92,7 +87,7 @@ func (m Model) View() string {
 }
 
 // New creates new detail instance.
-func New(theme *theme.Theme, digest *digest.Digester, panels []*statbar.Panel) Model {
+func New(theme *theme.Theme, digest *digest.Digester, panels []*statbar.Panel) *Model {
 	m := Model{theme: theme}
 
 	m.statbar = statbar.New(theme, panels)
@@ -116,5 +111,14 @@ func New(theme *theme.Theme, digest *digest.Digester, panels []*statbar.Panel) M
 		m.charts = append(m.charts, chart)
 	}
 
-	return m
+	return &m
+}
+
+func (m *Model) update() {
+	graph := m.charts[m.statbar.Active].View()
+
+	div := m.theme.Divider.
+		Render(strings.Repeat("─", m.width))
+
+	m.viewport.SetContent(m.statbar.View() + "\n" + div + "\n" + graph)
 }

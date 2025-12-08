@@ -7,7 +7,7 @@ import (
 
 func trunc(dur time.Duration) time.Duration {
 	if dur < time.Nanosecond {
-		return time.Nanosecond / 2
+		return time.Nanosecond / 2 //nolint:mnd
 	}
 
 	if dur < time.Microsecond {
@@ -23,15 +23,15 @@ func trunc(dur time.Duration) time.Duration {
 	}
 
 	if dur < time.Minute {
-		return time.Second / 10
+		return time.Second / 10 //nolint:mnd
 	}
 
 	if dur < time.Hour {
-		return time.Minute / 10
+		return time.Minute / 10 //nolint:mnd
 	}
 
 	if dur < time.Hour*24 {
-		return time.Hour / 10
+		return time.Hour / 10 //nolint:mnd
 	}
 
 	return time.Hour
@@ -103,7 +103,7 @@ var (
 )
 
 func conv(value float64, prec [][]int) (int, int) {
-	for i := 0; i < len(prec); i++ {
+	for i := range prec {
 		if value > float64(prec[i][0]) {
 			return prec[i][1], prec[i][2]
 		}
@@ -125,7 +125,7 @@ func formatDefault(value float64) string {
 	return fmt.Sprintf("%.*f%s", prec, value/float64(unit), suffix)
 }
 
-type countUnit int
+type countUnit int //nolint:recvcheck
 
 const (
 	countUnitOne countUnit = 1
@@ -139,7 +139,7 @@ const (
 
 //go:generate go run github.com/dmarkham/enumer@latest -text -transform lower -trimprefix countUnit -type countUnit
 
-type dataUnit int
+type dataUnit int //nolint:recvcheck
 
 const (
 	dataUnitB  dataUnit = 1

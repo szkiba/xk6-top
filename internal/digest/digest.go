@@ -2,12 +2,13 @@
 package digest
 
 import (
+	"maps"
 	"time"
 )
 
 // Digest is the metrics digest data model.
 type Digest struct {
-	Config     map[string]interface{}
+	Config     map[string]any
 	Param      ParamData
 	Metrics    Metrics
 	Cumulative Aggregates
@@ -27,7 +28,7 @@ func newDigest(from *Digest) *Digest {
 		d.Cumulative = make(Aggregates)
 		d.Snapshot = make(Aggregates)
 		d.Metrics = make(Metrics)
-		d.Config = make(map[string]interface{})
+		d.Config = make(map[string]any)
 	} else {
 		d.Start = from.Start
 		d.Stop = from.Stop
@@ -36,12 +37,13 @@ func newDigest(from *Digest) *Digest {
 		d.Snapshot = from.Snapshot.clone()
 		d.Metrics = from.Metrics.clone()
 		d.State = from.State
+
 		if d.Config == nil {
-			d.Config = make(map[string]interface{})
+			d.Config = make(map[string]any)
 		}
-		for key, value := range from.Config {
-			d.Config[key] = value
-		}
+
+		maps.Copy(d.Config, from.Config)
+
 		d.Thresholds = from.Thresholds
 		d.Playback = from.Playback
 	}
@@ -123,7 +125,7 @@ func (d *Digest) TimePassed() time.Duration {
 // ProgressPercent return percent value of elapsed time.
 func (d *Digest) ProgressPercent() float64 {
 	if d.State == StateFinished {
-		return 100
+		return 100 //nolint:mnd
 	}
 
 	total := d.Duration()
