@@ -102,7 +102,7 @@ func CaptureStart() {
 	os.Stderr = createTemp("stderr")
 
 	if os.Getenv(envDashboard) != "true" {
-		os.Setenv(envDashboard, "true") //nolint:errcheck,gosec
+		_ = os.Setenv(envDashboard, "true")
 	}
 }
 
