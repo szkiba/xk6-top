@@ -16,7 +16,7 @@ import (
 type Model struct {
 	theme    *theme.Theme
 	digest   *digest.Digest
-	statbar  statbar.Model
+	statbar  *statbar.Model
 	charts   []tea.Model
 	viewport viewport.Model
 	ready    bool
@@ -25,12 +25,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var (
 		cmds []tea.Cmd
 		cmd  tea.Cmd
@@ -78,7 +78,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if !m.ready {
 		return "\n  Initializing..."
 	}
@@ -87,7 +87,7 @@ func (m Model) View() string {
 }
 
 // New creates new detail instance.
-func New(theme *theme.Theme, digest *digest.Digester, panels []*statbar.Panel) Model {
+func New(theme *theme.Theme, digest *digest.Digester, panels []*statbar.Panel) *Model {
 	m := Model{theme: theme}
 
 	m.statbar = statbar.New(theme, panels)
@@ -111,7 +111,7 @@ func New(theme *theme.Theme, digest *digest.Digester, panels []*statbar.Panel) M
 		m.charts = append(m.charts, chart)
 	}
 
-	return m
+	return &m
 }
 
 func (m *Model) update() {

@@ -1,7 +1,7 @@
 package digest
 
 // Level defines log and alert levels.
-type Level int
+type Level int //nolint:recvcheck
 
 const (
 	// None means regular.

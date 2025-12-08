@@ -1,7 +1,7 @@
 package digest
 
 // EventType defines the type of the SSE event.
-type EventType int
+type EventType int //nolint:recvcheck
 
 const (
 	// EventTypeConfig mean "config" SSE event.

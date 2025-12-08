@@ -125,7 +125,7 @@ func formatDefault(value float64) string {
 	return fmt.Sprintf("%.*f%s", prec, value/float64(unit), suffix)
 }
 
-type countUnit int
+type countUnit int //nolint:recvcheck
 
 const (
 	countUnitOne countUnit = 1
@@ -139,7 +139,7 @@ const (
 
 //go:generate go run github.com/dmarkham/enumer@latest -text -transform lower -trimprefix countUnit -type countUnit
 
-type dataUnit int
+type dataUnit int //nolint:recvcheck
 
 const (
 	dataUnitB  dataUnit = 1

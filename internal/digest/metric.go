@@ -1,16 +1,20 @@
 package digest
 
 // A MetricType specifies the type of a metric.
-type MetricType int
+type MetricType int //nolint:recvcheck
 
 //go:generate go run github.com/dmarkham/enumer@latest -text -json -transform lower -trimprefix MetricType -type MetricType
 
 // Possible values for MetricType.
 const (
-	MetricTypeCounter MetricType = iota // A counter that sums its data points
-	MetricTypeGauge                     // A gauge that displays the latest value
-	MetricTypeTrend                     // A trend, min/max/avg/med are interesting
-	MetricTypeRate                      // A rate, displays % of values that aren't 0
+	// MetricTypeCounter is a counter that sums its data points.
+	MetricTypeCounter MetricType = iota
+	// MetricTypeGauge is a gauge that displays the latest value.
+	MetricTypeGauge
+	// MetricTypeTrend is a trend, min/max/avg/med are interesting.
+	MetricTypeTrend
+	// MetricTypeRate is a rate, displays % of values that aren't 0.
+	MetricTypeRate
 )
 
 //nolint:gochecknoglobals
@@ -38,7 +42,7 @@ func (md MetricType) Aggregates() []string {
 }
 
 // ValueType holds the type of values a metric contains.
-type ValueType int
+type ValueType int //nolint:recvcheck
 
 //go:generate go run github.com/dmarkham/enumer@latest -text -json -transform lower -trimprefix ValueType -type ValueType
 

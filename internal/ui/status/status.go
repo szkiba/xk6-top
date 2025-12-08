@@ -21,12 +21,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
@@ -57,7 +57,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if !m.ready {
 		return ""
 	}
@@ -94,12 +94,12 @@ func (m *Model) progress() string {
 }
 
 // New creates new status instance.
-func New(theme *theme.Theme) Model {
+func New(theme *theme.Theme) *Model {
 	m := Model{
 		theme: theme,
 	}
 
-	return m
+	return &m
 }
 
 func (m *Model) state() string {

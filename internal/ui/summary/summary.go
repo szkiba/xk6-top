@@ -24,12 +24,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -65,12 +65,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	return m.table.View()
 }
 
 // New creates new summary instance.
-func New(mtype digest.MetricType) Model {
+func New(mtype digest.MetricType) *Model {
 	styles := table.Styles{
 		Selected: lipgloss.NewStyle().Reverse(true),
 		Header: lipgloss.NewStyle().
@@ -90,7 +90,7 @@ func New(mtype digest.MetricType) Model {
 		showTags: true,
 	}
 
-	return m
+	return &m
 }
 
 func (m *Model) cummulativeMetrics() []string {

@@ -18,12 +18,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case *digest.Digest:
 		m.digest = msg
@@ -38,7 +38,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if !m.ready {
 		return ""
 	}
@@ -67,6 +67,6 @@ func (m *Model) progress() string {
 }
 
 // New creates new divider instance.
-func New(theme *theme.Theme) Model {
-	return Model{theme: theme}
+func New(theme *theme.Theme) *Model {
+	return &Model{theme: theme}
 }

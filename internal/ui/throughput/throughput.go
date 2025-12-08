@@ -21,12 +21,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case navbar.NavChangedMsg:
 		m.update()
@@ -50,7 +50,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if len(m.table.Rows()) == 0 {
 		return ""
 	}
@@ -59,7 +59,7 @@ func (m Model) View() string {
 }
 
 // New creates new throughput instance.
-func New() Model {
+func New() *Model {
 	styles := table.Styles{
 		Header: lipgloss.NewStyle().
 			Bold(true).
@@ -77,7 +77,7 @@ func New() Model {
 		),
 	}
 
-	return m
+	return &m
 }
 
 func (m *Model) update() {

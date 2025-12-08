@@ -29,12 +29,12 @@ type Model struct {
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:cyclop
+func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:cyclop
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -70,7 +70,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:cyclop
 }
 
 // View implements tea.Model.
-func (m Model) View() string {
+func (m *Model) View() string {
 	if len(m.data) < 1 || len(m.data[0]) < 1 {
 		return ""
 	}
@@ -102,14 +102,14 @@ func (m Model) View() string {
 }
 
 // New creates new chart instance.
-func New(digest *digest.Digester, series []*Serie) Model {
+func New(digest *digest.Digester, series []*Serie) *Model {
 	m := Model{
 		digest:  digest,
 		series:  series,
 		details: len(series) - 1,
 	}
 
-	return m
+	return &m
 }
 
 func (m *Model) update() {

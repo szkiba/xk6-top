@@ -1,7 +1,7 @@
 package digest
 
 // State defines the SSE stream/connection states.
-type State int
+type State int //nolint:recvcheck
 
 const (
 	// StateWaiting means waiting for data.
