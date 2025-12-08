@@ -80,6 +80,7 @@ func New(sseEndpoint string) *Model {
 // Init implements tea.Model.
 func (m *Model) Init() tea.Cmd {
 	return tea.Batch(
+		tea.SetWindowTitle("k6 dashboard"),
 		stream.Subscribe(m.sseContext, m.sseEndpoint, m.stream),
 		m.readEvent,
 	)

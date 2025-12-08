@@ -112,7 +112,7 @@ func (m Model) View() string {
 			style = activeStyle
 		}
 
-		style = style.Copy().Padding(0, 1)
+		style = style.Padding(0, 1)
 
 		doc.WriteString(style.Render(item.Label))
 	}
@@ -133,5 +133,5 @@ func New(theme *theme.Theme, items []*Item) Model {
 //nolint:gochecknoglobals
 var (
 	inactiveStyle = lipgloss.NewStyle().Padding(0, 1)
-	activeStyle   = inactiveStyle.Copy().Reverse(true)
+	activeStyle   = inactiveStyle.Reverse(true)
 )
