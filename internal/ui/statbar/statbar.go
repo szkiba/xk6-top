@@ -93,7 +93,7 @@ func (m *Model) View() string {
 	labels := m.getLabels()
 
 	for idx, panel := range m.panels {
-		sty := pan.Copy().Reverse(idx == m.Active)
+		sty := pan.Reverse(idx == m.Active)
 
 		met, found := m.digest.FindMetric(panel.Metric)
 		if !found {

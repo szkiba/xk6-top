@@ -101,7 +101,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 var nodata string
 
 func (m *Model) nodata() {
-	style := m.theme.Primary.Copy().Align(lipgloss.Center, lipgloss.Center).
+	style := m.theme.Primary.Align(lipgloss.Center, lipgloss.Center).
 		Width(m.viewport.Width).
 		Height(m.viewport.Height)
 
@@ -117,7 +117,7 @@ func (m *Model) update() {
 
 	thresholds := m.digest.Thresholds
 
-	style := m.theme.Heading.Copy().
+	style := m.theme.Heading.
 		Width(m.viewport.Width).
 		AlignHorizontal(lipgloss.Center)
 

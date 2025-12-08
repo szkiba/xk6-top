@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/glamour"
+	"github.com/charmbracelet/glamour/styles"
 )
 
 const fileMode = 0o600
@@ -44,20 +45,20 @@ func main() {
 
 	var margin uint
 
-	glamour.DarkStyleConfig.Document.Margin = &margin
-	glamour.LightStyleConfig.Document.Margin = &margin
+	styles.DarkStyleConfig.Document.Margin = &margin
+	styles.LightStyleConfig.Document.Margin = &margin
 
-	glamour.DarkStyleConfig.H1.Prefix = "# "
-	glamour.DarkStyleConfig.H1.Suffix = ""
-	glamour.DarkStyleConfig.H1.Color = nil
-	glamour.DarkStyleConfig.H1.BackgroundColor = nil
-	glamour.DarkStyleConfig.Code.BackgroundColor = nil
+	styles.DarkStyleConfig.H1.Prefix = "# "
+	styles.DarkStyleConfig.H1.Suffix = ""
+	styles.DarkStyleConfig.H1.Color = nil
+	styles.DarkStyleConfig.H1.BackgroundColor = nil
+	styles.DarkStyleConfig.Code.BackgroundColor = nil
 
-	glamour.LightStyleConfig.H1.Prefix = "# "
-	glamour.LightStyleConfig.H1.Suffix = ""
-	glamour.LightStyleConfig.H1.Color = nil
-	glamour.LightStyleConfig.H1.BackgroundColor = nil
-	glamour.LightStyleConfig.Code.BackgroundColor = nil
+	styles.LightStyleConfig.H1.Prefix = "# "
+	styles.LightStyleConfig.H1.Suffix = ""
+	styles.LightStyleConfig.H1.Color = nil
+	styles.LightStyleConfig.H1.BackgroundColor = nil
+	styles.LightStyleConfig.Code.BackgroundColor = nil
 
 	if err := render(os.Args[1], "dark", os.Args[2]); err != nil {
 		panic(err)

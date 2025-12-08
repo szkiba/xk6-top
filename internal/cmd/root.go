@@ -76,8 +76,6 @@ func runRoot(url string) error {
 		tea.WithAltScreen(),
 	)
 
-	prog.SetWindowTitle("k6 dashboard")
-
 	_, err := prog.Run()
 
 	return err
