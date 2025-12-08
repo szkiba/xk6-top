@@ -112,7 +112,7 @@ func runRun(args []string) error {
 	ctx, cancel := context.WithCancel(context.TODO())
 	defer cancel()
 
-	cmd := exec.CommandContext(ctx, "k6", k6args...) //nolint:gosec
+	cmd := exec.CommandContext(ctx, "k6", k6args...) //#nosec:G204
 
 	cmd.Stdout = output
 	cmd.Stderr = output
