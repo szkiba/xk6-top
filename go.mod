@@ -8,7 +8,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.4
 	github.com/charmbracelet/glamour v0.10.0
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250404203927-76690c660834
-	github.com/guptarohit/asciigraph v0.7.3
+	github.com/guptarohit/asciigraph v0.8.1
 	github.com/r3labs/sse/v2 v2.10.0
 	github.com/spf13/cobra v1.10.2
 	go.k6.io/k6 v1.4.2
